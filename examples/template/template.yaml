@@ -13,11 +13,11 @@ apiVersion: scaffolder.backstage.io/v2beta3
 # https://backstage.io/docs/features/software-catalog/descriptor-format#kind-template
 kind: Template
 metadata:
-  name: example-microservice-template
-  title: Example microservice Template
-  description: An example template for the scaffolder that creates a simple microservice service
+  name: Backstage-microservice-template
+  title: Backstage microservice Template
+  description: An example template microservice
 spec:
-  owner: user:guest
+  owner: YennyTabordaRamirez
   type: service
 
   # These parameters are used to generate the input form in the frontend, and are
