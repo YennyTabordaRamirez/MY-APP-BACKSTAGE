@@ -28,10 +28,24 @@ backend:
   # This is for local development only, it is not recommended to use this in production
   # The production database configuration is stored in app-config.production.yaml
   database:
-    client: better-sqlite3
-    connection: ':memory:'
-  # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
-
+ # config options: https://node-postgres.com/apis/client
+    client: pg
+    connection:
+      host: 127.0.0.1
+      port: 5432
+      user: postgres
+      password: admin
+      # https://node-postgres.com/features/ssl
+      # ssl:
+      #   host is only needed if the connection name differs from the certificate name.
+      #   This is for example the case with CloudSQL.
+      #   host: servername in the certificate
+      #   ca:
+      #     $file: <file-path>/server.pem
+      #   key:
+      #     $file: <file-path>/client.key
+      #   cert:
+      #     $file: <file-path>/client-cert.pem
 integrations:
   github:
     - host: github.com
@@ -44,12 +58,17 @@ integrations:
     #   token: ${GHE_TOKEN}
 
 proxy:
+   '/circleci/api':
+    target: https://circleci.com/api/v1.1
+    headers:
+      Circle-Token: ${CIRCLECI_AUTH_TOKEN}
   ### Example for how to add a proxy endpoint for the frontend.
   ### A typical reason to do this is to handle HTTPS and CORS for internal services.
   # endpoints:
   #   '/test':
   #     target: 'https://example.com'
   #     changeOrigin: true
+
 
 # Reference documentation http://backstage.io/docs/features/techdocs/configuration
 # Note: After experimenting with basic setup, use CI/CD to generate docs
@@ -63,11 +82,21 @@ techdocs:
     type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
 auth:
-  # see https://backstage.io/docs/auth/ to learn about auth providers
-  providers: {}
+ # see https://backstage.io/docs/auth/ to learn about auth providers
+  environment: development
+  providers:
+    github:
+      development:
+        clientId: 2d0415597372d4f9380c
+        clientSecret: 30d34bbf7864cb703073f4f1ceb08bb5bd92c129
 
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
+  defaultAuthor:
+    name: YennyTR # Defaults to `Scaffolder`
+    email: tarayenny@gmail.com # Defaults to `scaffolder@backstage.io`
+  defaultCommitMessage: "¿Puedes ver eso?" # Defaults to 'Initial commit'
+
 
 catalog:
   import:

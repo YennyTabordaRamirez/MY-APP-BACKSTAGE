@@ -57,6 +57,8 @@ import {
 
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
+import {   EntityCircleCIContent, isCircleCIAvailable} from '@circleci/backstage-plugin';
+import { EntityKubernetesContent } from '@backstage/plugin-kubernetes';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -70,8 +72,10 @@ const cicdContent = (
   // This is an example of how you can implement your company's logic in entity page.
   // You can for example enforce that all components of type 'service' should use GitHubActions
   <EntitySwitch>
-    <EntitySwitch.Case if={isGithubActionsAvailable}>
-      <EntityGithubActionsContent />
+    {/* <EntitySwitch.Case if={isGithubActionsAvailable}> */}
+    <EntitySwitch.Case if={isCircleCIAvailable}>
+    <EntityCircleCIContent />
+      {/* <EntityGithubActionsContent /> */}
     </EntitySwitch.Case>
 
     <EntitySwitch.Case>
@@ -144,6 +148,10 @@ const serviceEntityPage = (
   <EntityLayout>
     <EntityLayout.Route path="/" title="Overview">
       {overviewContent}
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/kubernetes" title="Kubernetes">
+      <EntityKubernetesContent refreshIntervalMs={30000} />
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
